@@ -1,0 +1,23 @@
+create or replace function process_insert_supplies()
+returns trigger as $ad_sd_trigger$
+begin
+	update supplies set payment_needful = payment_needful + new.sum_total
+	where supplies.supply_id = new.supply_id;
+	return NULL;
+end
+$ad_sd_trigger$ language plpgsql;
+create trigger insert_supplies after insert on supply_details
+for each row execute procedure process_insert_supplies();
+
+
+
+create or replace function process_insert_payment_detail()
+returns trigger as $ad_pd_trigger$
+begin
+	update supplies set paid = paid + new.payment
+	where supplies.supply_id = new.supply_id;
+	return NULL;
+end
+$ad_pd_trigger$ language plpgsql;
+create trigger insert_payment_detail after insert on payment_detail
+for each row execute procedure process_insert_payment_detail();

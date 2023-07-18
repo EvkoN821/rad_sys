@@ -1,0 +1,39 @@
+CREATE TABLE IF NOT EXISTS Suppliers(
+	supplier_id serial primary key,
+	supplier_name varchar(100),
+	contact_name varchar(100),
+	address varchar(100),
+	city varchar(100),
+	postal_code varchar(20),
+	phone varchar(15)
+);
+CREATE TABLE IF NOT EXISTS Products(
+	product_id serial primary key,
+	supplier_id int references Suppliers(supplier_id) ON DELETE CASCADE,
+	product_name varchar(100),
+	unit varchar(100),
+	price int,
+	weight double precision
+);
+
+CREATE TABLE IF NOT EXISTS Supplies(
+	supply_id int primary key,
+	supplier_id int references Suppliers(supplier_id) ON DELETE CASCADE,
+	date_compilling date,
+	payment_needful int default 0,
+	paid int default 0
+);
+
+CREATE TABLE IF NOT EXISTS Supply_details(
+	supply_detail_id serial primary key,
+	supply_id int references Supplies(supply_id) ON DELETE CASCADE,
+	product_id int references Products(product_id) ON DELETE CASCADE,
+	quanity int,
+	sum_total int
+);
+CREATE TABLE IF NOT EXISTS Payment_detail(
+	payment_id serial primary key,
+	supply_id int references Supplies(supply_id) ON DELETE CASCADE,
+	date_pay date,
+	payment int
+);
